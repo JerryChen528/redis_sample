@@ -1,0 +1,41 @@
+CC      = g++
+C       = gcc
+DEFINES         = -DLINUX -std=c++0x
+CFLAGS          = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+INCPATH         = -I./include
+LFLAGS          =
+LIBS            = -lpthread -L./libs/ -lxredis -lhiredis
+TARGET      = redis_push
+
+OBJECTS       = redis_push.o
+
+first: all
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cc.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cxx.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+.C.o:
+	$(C) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+.c.o:
+	$(C) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+####### Build rules
+
+all: makefile_push  $(TARGET)
+
+$(TARGET):  $(OBJECTS)
+	$(CC) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
+
+clean:
+	rm -rf redis_push ../*.o
+
